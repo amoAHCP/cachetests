@@ -1,0 +1,36 @@
+app:
+  name: cachetest-main
+spring:
+  profiles:
+    active: ${APP:hznearobject}
+  main:
+    banner-mode: off
+  jmx:
+    enabled: false
+  jsp-servlet:
+    registered: false
+  freemarker:
+    enabled: false
+  groovy:
+    template:
+      enabled: false
+  mobile:
+    sitepreference:
+      enabled: false
+  thymeleaf:
+    cache: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: mysecretpassword
+  cache:
+    type: hazelcast
+    file: test.txt
+
+
+

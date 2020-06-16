@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-4.0.xsd"
+                  xmlns="http://www.hazelcast.com/schema/client-config">
+    <properties>
+        <property name="hazelcast.discovery.enabled">false</property>
+    </properties>
+<network>
+    <cluster-members>
+        <address>127.0.0.1:5701</address>
+    </cluster-members>
+
+</network>
+
+   <near-cache name="persons">
+       <in-memory-format>BINARY</in-memory-format>
+    <invalidate-on-change>false</invalidate-on-change>
+    <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="9000"/>
+
+</near-cache>
+    <!--
+
+       <near-cache name="articlesBinary">
+           <in-memory-format>BINARY</in-memory-format>
+           <invalidate-on-change>false</invalidate-on-change>
+            <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
+       </near-cache>
+
+       <near-cache name="articlesEvictionPolicy">
+           <in-memory-format>OBJECT</in-memory-format>
+           <invalidate-on-change>false</invalidate-on-change>
+           <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
+       </near-cache>
+       -->
+</hazelcast-client>

@@ -1,0 +1,9 @@
+app:
+  name: cachetest-main
+spring:
+  cache:
+    type: hazelcast
+    file: config/hz-near-binary.xml
+
+
+

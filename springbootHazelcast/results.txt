@@ -1,0 +1,57 @@
+Test: ab -c 20 -n 2000 http://localhost:8080/api/v1/persons
+# postgers without cache
+Server Software:
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/v1/persons
+Document Length:        52539 bytes
+
+Concurrency Level:      20
+Time taken for tests:   6.535 seconds
+Complete requests:      2000
+Failed requests:        0
+Total transferred:      105288000 bytes
+HTML transferred:       105078000 bytes
+Requests per second:    306.03 [#/sec] (mean)
+Time per request:       65.353 [ms] (mean)
+Time per request:       3.268 [ms] (mean, across all concurrent requests)
+Transfer rate:          15732.98 [Kbytes/sec] received
+
+# postgers wit near cache OBJECT
+Server Software:
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/v1/persons
+Document Length:        106065 bytes
+
+Concurrency Level:      20
+Time taken for tests:   1.392 seconds
+Complete requests:      2000
+Failed requests:        0
+Total transferred:      212340000 bytes
+HTML transferred:       212130000 bytes
+Requests per second:    1437.13 [#/sec] (mean)
+Time per request:       13.917 [ms] (mean)
+Time per request:       0.696 [ms] (mean, across all concurrent requests)
+Transfer rate:          149003.95 [Kbytes/sec] received
+
+# postgers wit near cache BINARY
+Server Software:
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/v1/persons
+Document Length:        106065 bytes
+
+Concurrency Level:      20
+Time taken for tests:   4.922 seconds
+Complete requests:      2000
+Failed requests:        0
+Total transferred:      212340000 bytes
+HTML transferred:       212130000 bytes
+Requests per second:    406.38 [#/sec] (mean)
+Time per request:       49.215 [ms] (mean)
+Time per request:       2.461 [ms] (mean, across all concurrent requests)
+Transfer rate:          42133.91 [Kbytes/sec] received
