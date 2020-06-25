@@ -31,8 +31,8 @@ public class CachingConfiguration implements CachingConfigurer {
     private @Value("${spring.cache.file}")
     String hzConfig;
 
-    @Profile("!devlocal")
-    @Bean
+    @Profile("!devlocal & !kube1")
+    @Bean(name = "cacheManager")
     public CacheManager cacheManager() {
         return new HazelcastCacheManager(hazelcastInstance());
     }
@@ -52,18 +52,24 @@ public class CachingConfiguration implements CachingConfigurer {
         return null;
     }
 
-    @Bean
+    @Bean(name = "cacheManager")
     @Profile("devlocal")
     public CacheManager getNoOpCacheManager() {
         return new NoOpCacheManager();
     }
 
+    @Bean(name = "cacheManager")
+    @Profile("kube1")
+    public CacheManager getNoOpCacheManagerKube() {
+        System.out.println("Kube 1: cache manager");
+        return new NoOpCacheManager();
+    }
+
     HazelcastInstance hazelcastInstance() {
-        String POD_NAMESPACE = System.getenv("POD_NAMESPACE");
-        String HZ_GROUP_NAME = System.getenv("HZ_GROUP_NAME");
+
         String HZ_CLIENT_CONFIG = System.getenv("HZ_CLIENT_CONFIG");
-        String HZ_SERVICE_NAME = System.getenv("HZ_SERVICE_NAME");
-        System.out.println("Pod Namespace: " + POD_NAMESPACE);
+
+        System.out.println("config: " + hzConfig);
         SerializerConfig productSerializer = new SerializerConfig()
                 .setTypeClass(Person.class)
                 .setImplementation(new PersonKryoSerializer(false));

@@ -2,8 +2,7 @@ app:
   name: cachetest-main
 spring:
   cache:
-    type: hazelcast
-    file: config/kube-hazelcast.xml
+    type: NONE
   datasource:
     url: jdbc:postgresql://postgres:5432/postgres
     username: postgresadmin

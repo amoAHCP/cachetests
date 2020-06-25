@@ -6,6 +6,7 @@
    <properties>
         <property name="hazelcast.discovery.enabled">false</property>
     </properties>
+    <cluster-name>my-cluster</cluster-name>
     <network>
         <kubernetes enabled="true"/>
         <discovery-strategies>
@@ -16,19 +17,8 @@
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
         <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="3000"/>
+
     </near-cache>
 
-    <!--
-   <near-cache name="articlesBinary">
-       <in-memory-format>BINARY</in-memory-format>
-       <invalidate-on-change>false</invalidate-on-change>
-        <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
-   </near-cache>
 
-   <near-cache name="articlesEvictionPolicy">
-       <in-memory-format>OBJECT</in-memory-format>
-       <invalidate-on-change>false</invalidate-on-change>
-       <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
-   </near-cache>
-   -->
 </hazelcast-client>

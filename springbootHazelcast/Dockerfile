@@ -9,7 +9,8 @@ WORKDIR /opt/app
 # cp target/spring-boot-web.jar /opt/app/app.jar
 COPY ${JAR_FILE} app.jar
 
-ENV HZ_CLIENT_CONFIG "config/kube-hazelcast.xml"
+#ENV APP test
+#ENV HZ_CLIENT_CONFIG "config/kube-hazelcast.xml"
 
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]

@@ -1,4 +1,4 @@
-run in docker
+run in docker / local
 
 DB:
 docker run  \
@@ -12,3 +12,6 @@ docker run  \
 hazelcast (see src/resources/plain)    
 docker build -t hz .
 docker run -p 5701:5701 hz:latest
+
+
+// run in Kubernetes

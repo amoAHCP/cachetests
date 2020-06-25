@@ -1,0 +1,1 @@
+helm install hazelcast hazelcast --values hazelcast.yaml

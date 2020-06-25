@@ -32,6 +32,8 @@ import static org.junit.Assert.assertEquals;
 public class PersonIntegrationTest2 extends AbstractBenchmark{
 
     private static final ObjectMapper om = new ObjectMapper();
+   // public static final String URL = "http://localhost:8080";
+    public static final String URL = "http://192.168.64.37";
 
     private static TestRestTemplate restTemplate = new TestRestTemplate();
 
@@ -49,7 +51,7 @@ public class PersonIntegrationTest2 extends AbstractBenchmark{
         }).collect(Collectors.toList());
 
         persons.stream().forEach(p-> {
-            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/v1/persons", p, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(URL + "/api/v1/persons", p, String.class);
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
             System.out.println("---"+response.getBody());
@@ -59,6 +61,6 @@ public class PersonIntegrationTest2 extends AbstractBenchmark{
 
    @Benchmark
     public void findAll() {
-        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/api/v1/persons",String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(URL + "/api/v1/persons",String.class);
     }
 }

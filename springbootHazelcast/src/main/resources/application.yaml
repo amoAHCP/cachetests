@@ -2,7 +2,7 @@ app:
   name: cachetest-main
 spring:
   profiles:
-    active: ${APP:hznearobject}
+    active: ${APP:devlocal}
   main:
     banner-mode: off
   jmx:
