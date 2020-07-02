@@ -16,6 +16,9 @@ hazelcast:
         persons:
           in-memory-format: BINARY
           cache-deserialized-values: INDEX-ONLY
+          backup-count: 0
+          async-backup-count: 2
+          read-backup-data: true
           eviction:
             eviction-policy: LRU
             max-size-policy: PER_NODE

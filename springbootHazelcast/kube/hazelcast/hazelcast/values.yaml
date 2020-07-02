@@ -141,12 +141,12 @@ service:
   # If not set and create is true, a name is generated using the fullname template
   # name:
   # type defines the Kubernetes service type ('ClusterIP', 'LoadBalancer', or 'NodePort')
-  type: ClusterIP
+  type: NodePort
   # port is the Kubernetes service port
   port: 5701
   # clusterIP set to None makes the service headless
   # It is required if DNS Lookup is used (https://github.com/hazelcast/hazelcast-kubernetes#dns-lookup)
-  clusterIP: "None"
+  clusterIP: "10.96.123.138"
 
 
 # Role-based Access Control

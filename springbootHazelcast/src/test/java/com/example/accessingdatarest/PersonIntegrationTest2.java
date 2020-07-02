@@ -33,7 +33,7 @@ public class PersonIntegrationTest2 extends AbstractBenchmark{
 
     private static final ObjectMapper om = new ObjectMapper();
    // public static final String URL = "http://localhost:8080";
-    public static final String URL = "http://192.168.64.37";
+    public static final String URL = "http://192.168.64.38";
 
     private static TestRestTemplate restTemplate = new TestRestTemplate();
 
