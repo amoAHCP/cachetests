@@ -36,10 +36,10 @@ public class PersonService {
     @Caching(evict = {
             @CacheEvict(value = "persons", allEntries = true)
     }, put = {
-            @CachePut(cacheNames = "persons")}
+            @CachePut(cacheNames = "persons" ,key = "#person.id")}
     )
-    public Person save(Person stock) {
-        return personRepository.save(stock);
+    public Person save(Person person) {
+        return personRepository.save(person);
     }
 
 

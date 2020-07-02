@@ -1,56 +1,36 @@
 package com.example.accessingdatarest.configuration;
 
 
-import com.example.accessingdatarest.entity.Person;
-import com.example.accessingdatarest.serializer.PersonKryoSerializer;
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.client.config.XmlClientConfigBuilder;
-import com.hazelcast.config.SerializerConfig;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurer;
-import org.springframework.cache.interceptor.CacheErrorHandler;
-import org.springframework.cache.interceptor.CacheResolver;
-import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.support.NoOpCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Optional;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Configuration
-public class CachingConfiguration implements CachingConfigurer {
+@EnableConfigurationProperties(CacheConfigurationProperties.class)
+public class CachingConfiguration extends CachingConfigurerSupport {
     private @Autowired
     Environment environment;
-    private @Value("${spring.cache.file}")
-    String hzConfig;
+    private @Value("${spring.cache.timeout}")
+    int timeout;
 
-    @Profile("!devlocal & !kube1")
-    @Bean(name = "cacheManager")
-    public CacheManager cacheManager() {
-        return new HazelcastCacheManager(hazelcastInstance());
-    }
-
-    @Override
-    public CacheResolver cacheResolver() {
-        return null;
-    }
-
-    @Override
-    public KeyGenerator keyGenerator() {
-        return null;
-    }
-
-    @Override
-    public CacheErrorHandler errorHandler() {
-        return null;
-    }
 
     @Bean(name = "cacheManager")
     @Profile("devlocal")
@@ -65,37 +45,46 @@ public class CachingConfiguration implements CachingConfigurer {
         return new NoOpCacheManager();
     }
 
-    HazelcastInstance hazelcastInstance() {
-
-        String HZ_CLIENT_CONFIG = System.getenv("HZ_CLIENT_CONFIG");
-
-        System.out.println("config: " + hzConfig);
-        SerializerConfig productSerializer = new SerializerConfig()
-                .setTypeClass(Person.class)
-                .setImplementation(new PersonKryoSerializer(false));
-
-        ClientConfig config = new XmlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(Optional.ofNullable(HZ_CLIENT_CONFIG).orElse(hzConfig))).build(); //new ClientConfig();
-        //config.getSerializationConfig().addSerializerConfig(productSerializer);
-
-
-        /**   if(POD_NAMESPACE!=null) {
-         //config.getGroupConfig().setName(HZ_GROUP_NAME);
-         String serviceName = HZ_SERVICE_NAME + "." + POD_NAMESPACE + ".svc.cluster.local";
-         System.out.println("resolve cache service service: "+serviceName);
-         config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
-         .setProperty("service-dns", serviceName);
-
-
-
-         }**/
-        // config.getGroupConfig().setName("caching-test");
-        // for client HazelcastInstance LocalMapStatistics will not available
-        return HazelcastClient.newHazelcastClient(config);
-        // return Hazelcast.newHazelcastInstance();
+    private static RedisCacheConfiguration createCacheConfiguration(long timeoutInSeconds) {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofSeconds(timeoutInSeconds));
     }
 
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory(CacheConfigurationProperties properties) {
+       // log.info("Redis (/Lettuce) configuration enabled. With cache timeout " + properties.getTimeout() + " seconds.");
 
-    /** @Bean public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-    return new PropertySourcesPlaceholderConfigurer();
-    }**/
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(properties.getRedisHost());
+        redisStandaloneConfiguration.setPort(properties.getRedisPort());
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+    }
+
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
+        redisTemplate.setConnectionFactory(cf);
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisCacheConfiguration cacheConfiguration(CacheConfigurationProperties properties) {
+        return createCacheConfiguration(properties.getTimeout());
+    }
+
+    @Profile("!devlocal & !kube1")
+    @Bean(name = "cacheManager")
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory, CacheConfigurationProperties properties) {
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+
+        for (Map.Entry<String, Long> cacheNameAndTimeout : properties.getCacheExpirations().entrySet()) {
+            cacheConfigurations.put(cacheNameAndTimeout.getKey(), createCacheConfiguration(cacheNameAndTimeout.getValue()));
+        }
+
+        return RedisCacheManager
+                .builder(redisConnectionFactory)
+                .cacheDefaults(cacheConfiguration(properties))
+                .withInitialCacheConfigurations(cacheConfigurations).build();
+    }
+
 }

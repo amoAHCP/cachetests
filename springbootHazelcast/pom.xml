@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>springbootHazelcast</artifactId>
+	<artifactId>springbootRedisCache</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springbootHazelcast</name>
-	<description>springbootHazelcast</description>
+	<description>springbootRedisCache</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -23,11 +23,13 @@
 	</properties>
 
 	<dependencies>
-
 		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-all</artifactId>
-			<version>${hazelcast.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -115,27 +117,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!--<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>fabric8-maven-plugin</artifactId>
-				<version>4.4.1</version>
-				<configuration>
-					<images>
-						<image>
-							<name>step5</name>
-							<alias>step5</alias>
-							<build>
-								<assembly>
-									<basedir>/deployments</basedir>
-									<descriptorRef>artifact-with-dependencies</descriptorRef>
-								</assembly>
-								<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
 
-							</build>
-						</image>
-					</images>
-				</configuration>
-			</plugin>-->
 		</plugins>
 	</build>
 

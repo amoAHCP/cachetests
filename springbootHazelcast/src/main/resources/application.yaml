@@ -2,7 +2,7 @@ app:
   name: cachetest-main
 spring:
   profiles:
-    active: ${APP:devlocal}
+    active: ${APP:dev}
   main:
     banner-mode: off
   jmx:
@@ -29,8 +29,10 @@ spring:
     username: postgres
     password: mysecretpassword
   cache:
-    type: hazelcast
-    file: test.txt
+    type: redis
+    timeout: 60
+    cacheExpirations:
+      persons: 1800
 
 
 
