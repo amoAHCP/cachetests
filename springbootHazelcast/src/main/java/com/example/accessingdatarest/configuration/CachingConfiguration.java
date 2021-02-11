@@ -76,18 +76,11 @@ public class CachingConfiguration implements CachingConfigurer {
 
         ClientConfig config = new XmlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(Optional.ofNullable(HZ_CLIENT_CONFIG).orElse(hzConfig))).build(); //new ClientConfig();
         //config.getSerializationConfig().addSerializerConfig(productSerializer);
+        config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
+                .setProperty("namespace", "cachingtest")
+                .setProperty("service-name", "hazelcast");
 
 
-        /**   if(POD_NAMESPACE!=null) {
-         //config.getGroupConfig().setName(HZ_GROUP_NAME);
-         String serviceName = HZ_SERVICE_NAME + "." + POD_NAMESPACE + ".svc.cluster.local";
-         System.out.println("resolve cache service service: "+serviceName);
-         config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
-         .setProperty("service-dns", serviceName);
-
-
-
-         }**/
         // config.getGroupConfig().setName("caching-test");
         // for client HazelcastInstance LocalMapStatistics will not available
         return HazelcastClient.newHazelcastClient(config);
@@ -95,7 +88,4 @@ public class CachingConfiguration implements CachingConfigurer {
     }
 
 
-    /** @Bean public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-    return new PropertySourcesPlaceholderConfigurer();
-    }**/
 }

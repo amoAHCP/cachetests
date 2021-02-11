@@ -11,10 +11,11 @@ spec:
     metadata:
       labels:
         app: app
+        role: hazelcast
     spec:
       containers:
         - name: hz
-          image: hz:latest
+          image: amoahcp/hz:latest
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 8080

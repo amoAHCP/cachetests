@@ -8,9 +8,12 @@
     </properties>
     <cluster-name>my-cluster</cluster-name>
     <network>
-        <kubernetes enabled="true"/>
+        <kubernetes enabled="true" >
+
+        </kubernetes>
+
         <discovery-strategies>
-            
+
         </discovery-strategies>
     </network>
     <near-cache name="persons">

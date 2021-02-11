@@ -1,20 +1,16 @@
 kind: NetworkPolicy
 apiVersion: extensions/v1beta1
 metadata:
-  name: allow-5701-5703
+  name: allow-5432-1
 spec:
   podSelector:
     matchLabels:
-      role: hazelcast
+      app: postgresql
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              role: hazelcast
+              app: app
       ports:
         - protocol: TCP
-          port: 5701
-        - protocol: TCP
-          port: 5702
-        - protocol: TCP
-          port: 5703
+          port: 5432
