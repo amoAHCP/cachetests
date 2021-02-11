@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: openshift/postgresql-92-centos7
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "postgresdb"
+            - name: POSTGRESQL_USER
+              value: "postgresadmin"
+            - name: POSTGRESQL_PASSWORD
+              value: "mysecretPassword$"
+          volumeMounts:
+            - mountPath: /data
+              name: postgredb
+      volumes:
+        - name: postgredb
+          emptyDir: {}

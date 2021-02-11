@@ -1,3 +1,13 @@
+# Security Context properties
+securityContext:
+  # enabled is a flag to enable Security Context
+  enabled: true
+cluster:
+  memberCount: 6
+
+mancenter:
+  persistence:
+    size: 1Gi
 hazelcast:
   yaml:
     hazelcast:
@@ -11,7 +21,6 @@ hazelcast:
             service-name: ${serviceName}
             namespace: ${namespace}
             resolve-not-ready-addresses: true
-
       map:
         persons:
           in-memory-format: BINARY

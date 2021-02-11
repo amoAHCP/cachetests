@@ -40,9 +40,6 @@ hazelcast:
             enabled: false
           kubernetes:
             enabled: true
-            service-name: ${serviceName}
-            namespace: ${namespace}
-            resolve-not-ready-addresses: true
         rest-api:
           enabled: true
           endpoint-groups:
@@ -141,12 +138,12 @@ service:
   # If not set and create is true, a name is generated using the fullname template
   # name:
   # type defines the Kubernetes service type ('ClusterIP', 'LoadBalancer', or 'NodePort')
-  type: NodePort
+  type: ClusterIP
   # port is the Kubernetes service port
   port: 5701
   # clusterIP set to None makes the service headless
   # It is required if DNS Lookup is used (https://github.com/hazelcast/hazelcast-kubernetes#dns-lookup)
-  clusterIP: "10.96.123.138"
+  clusterIP:
 
 
 # Role-based Access Control
@@ -165,13 +162,13 @@ serviceAccount:
 # Security Context properties
 securityContext:
   # enabled is a flag to enable Security Context
-  enabled: true
+  enabled: false
   # runAsUser is the user ID used to run the container
-  runAsUser: 65534
+  runAsUser: 1000960000
   # runAsGroup is the primary group ID used to run all processes within any container of the pod
-  runAsGroup: 65534
+  runAsGroup: 1000960000
   # fsGroup is the group ID associated with the container
-  fsGroup: 65534
+  fsGroup: 1000960000
   # readOnlyRootFilesystem is a flag to enable readOnlyRootFilesystem for the Hazelcast security context
   readOnlyRootFilesystem: true
 

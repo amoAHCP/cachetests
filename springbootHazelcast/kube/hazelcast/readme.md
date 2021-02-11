@@ -1,1 +1,2 @@
-helm install hazelcast hazelcast --values hazelcast.yaml
+helm install hazelcast hazelcast --values hazelcast.yaml --version 3.3.0 --set securityContext.fsGroup=$( oc get project $(oc project  -q) -ojsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.supplemental-groups}' | cut -f1 -d '/' ) \
+--set securityContext.runAsUser=$( oc get project $(oc project  -q) -ojsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.uid-range}' | cut -f1 -d '/' ) 
