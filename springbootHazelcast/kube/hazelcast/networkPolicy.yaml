@@ -10,7 +10,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              project: cachingetest
+              project: user-amo-hazelcasttest
           podSelector:
             matchLabels:
               role: hazelcast
