@@ -1,0 +1,6 @@
+hazelcast-client:
+  cluster-name: my-cluster
+  network:
+    kubernetes:
+      enabled: true
+      service-name: my-cluster-hazelcast-enterprise

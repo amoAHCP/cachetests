@@ -6,6 +6,7 @@ import com.example.accessingdatarest.serializer.PersonKryoSerializer;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.XmlClientConfigBuilder;
+import com.hazelcast.client.config.YamlClientConfigBuilder;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
@@ -62,23 +63,26 @@ public class CachingConfiguration implements CachingConfigurer {
     @Profile("kube1")
     public CacheManager getNoOpCacheManagerKube() {
         System.out.println("Kube 1: cache manager");
-        return new NoOpCacheManager();
+        return new HazelcastCacheManager(hazelcastInstance());
     }
 
     HazelcastInstance hazelcastInstance() {
 
         String HZ_CLIENT_CONFIG = System.getenv("HZ_CLIENT_CONFIG");
 
-        System.out.println("config: " + hzConfig);
+        System.out.println("config: " + HZ_CLIENT_CONFIG);
         SerializerConfig productSerializer = new SerializerConfig()
                 .setTypeClass(Person.class)
                 .setImplementation(new PersonKryoSerializer(false));
 
-        ClientConfig config = new XmlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(Optional.ofNullable(HZ_CLIENT_CONFIG).orElse(hzConfig))).build(); //new ClientConfig();
+      //  ClientConfig config = new XmlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(Optional.ofNullable(HZ_CLIENT_CONFIG).orElse(hzConfig))).build(); //new ClientConfig();
+        ClientConfig config =new YamlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(HZ_CLIENT_CONFIG)).build();//new ClientConfig();
         //config.getSerializationConfig().addSerializerConfig(productSerializer);
-        config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
-                .setProperty("namespace", "cachingtest")
-                .setProperty("service-name", "hazelcast");
+      //  ClientConfig config = new ClientConfig();
+       // config.setClusterName("my-cluster");
+       // config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
+       //         .setProperty("namespace", "syrius-hazelcast")
+       //         .setProperty("service-name", "my-cluster-hazelcast-enterprise");
 
 
         // config.getGroupConfig().setName("caching-test");

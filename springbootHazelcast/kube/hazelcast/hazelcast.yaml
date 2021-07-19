@@ -1,14 +1,20 @@
-# Security Context properties
-securityContext:
-  # enabled is a flag to enable Security Context
-  enabled: true
-cluster:
-  memberCount: 6
+apiVersion: hazelcast.com/v1alpha1
+kind: HazelcastEnterprise
+metadata:
+  name: hz
+  namespace: syrius-hazelcast
+spec:
+  cluster:
+    memberCount: 3
 
-mancenter:
-  persistence:
-    size: 1Gi
-hazelcast:
+  mancenter:
+    # ingress configuration for mancenter
+    ingress:
+      enabled: true
+    persistence:
+      size: 1Gi
+  hazelcast:
+    licenseKeySecretName: hz-license-key-secret
   yaml:
     hazelcast:
       cluster-name: my-cluster
@@ -21,6 +27,22 @@ hazelcast:
             service-name: ${serviceName}
             namespace: ${namespace}
             resolve-not-ready-addresses: true
+        ssl:
+          enabled: ${hazelcast.ssl}
+        rest-api:
+          enabled: true
+          endpoint-groups:
+            HEALTH_CHECK:
+              enabled: true
+        hot-restart-persistence:
+          enabled: ${hazelcast.hotRestart}
+          base-dir: /data/hot-restart
+          validation-timeout-seconds: 1200
+          data-load-timeout-seconds: 900
+          auto-remove-stale-data: true
+        management-center:
+          enabled: ${hazelcast.mancenter.enabled}
+          url: ${hazelcast.mancenter.url}
       map:
         persons:
           in-memory-format: BINARY
@@ -39,4 +61,6 @@ hazelcast:
             eviction-policy: LRU
             max-size-policy: PER_NODE
             size: 9000
-
+  securityContext:
+    runAsUser: '1000760000'
+    fsGroup: '1000760000'
