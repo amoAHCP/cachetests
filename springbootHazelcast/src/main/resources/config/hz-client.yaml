@@ -1,5 +1,13 @@
 hazelcast-client:
   cluster-name: my-cluster
+  near-cache:
+    persons:
+      in-memory-format: OBJECT
+      invalidate-on-change: true
+      eviction:
+        eviction-policy: LRU
+        max-size-policy: ENTRY_COUNT
+        size: 10
   network:
     kubernetes:
       enabled: true

@@ -19,7 +19,7 @@
     <near-cache name="persons">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="3000"/>
+        <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="10"/>
 
     </near-cache>
 
