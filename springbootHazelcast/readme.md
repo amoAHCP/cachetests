@@ -1,17 +1,46 @@
-run in docker / local
+# setup-demo Namespace
 
-DB:
-docker run  \
-    --name some-postgres -p 5432:5432 \
-    -e POSTGRES_PASSWORD=mysecretpassword \
-    -e PGDATA=/var/lib/postgresql/data/pgdata \
-    -v /Users/andy.moncsek/Downloads:/var/lib/postgresql/data \
-    postgres
-    
-    
-hazelcast (see src/resources/plain)    
-docker build -t hz .
-docker run -p 5701:5701 hz:latest
+## precondition
+Hazelcast Operator is deployed (on blue1 it is)
+
+## setup the Hazelcast cluster
+1. oc new-project myhztest
+2. apply RBAC rules : oc apply -f https://raw.githubusercontent.com/hazelcast/hazelcast-operator/master/hazelcast-enterprise-operator/hazelcast-rbac.yaml
+3. apply license: echo -n "mylicensekey" | base64 --> copy output to kube/hazelcast/secret.yaml and apply --> oc apply -f kube/hazelcast/secret.yaml
+4. check security context: $( oc get project $(oc project  -q) -ojsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.uid-range}' | cut -f1 -d '/' )  --> should give you a number
+5. apply the id to kube/hazelcast/hazelcast-enterprize.yaml --> copy the number to securityContext.runAsUser & securityContext.fsGroup
+6. apply Cluster CRD: oc apply -f kube/hazelcast/hazelcast-enterprize.yaml
+7. wait until all Pods are up
+8. create a route to the management center (either by cmd or UI --> go to Routes, create new, give a name, select the service)
+9. check the created ServiceAccount (should be NamespaceName-hazelcast-enterprise): "oc get HazelcastEnterprise my-cluster -o yaml | grep ServiceAccount" 
+10. the management center works in dev mode (LDAP integration needs to be tested... sorry I failed ;-) 
+11. add the cluster config: delete the dev config --> "Add cluster config" --> clustername: my-cluster --> member Address: my-cluster-hazelcast-enterprise && PRESS ENTER!!!! otherwise it will fail
+
+## deploy openLDAP (ony for syrius so far)
+1. clone the repo https://git.adcubum.com/users/amoncsek/repos/egresspoc/browse/deployopenldap.sh
+2. set the correct NAMESPACE/PROJECT
+3. execute "sh deployopenldap.sh"
+
+## setup the database
+1. Deploy a postgresdb
+2. go to the "Developer view in OpenShift"
+3. go to +Add
+4. go to Database
+5. select Postgres
+6. Instantiate Template
+7.  username: postgresadmin, password: mysecretpassword, database name: postgres // values must match the values in the file: resources/application-kube1.yaml   
+
+## build & deploy the application
+1.  mvn clean package -DskipTests=true --> sorry no tests, since I work with hazelcast enterprise ;-/ --> AND YES.... I'TS GOOD OLD MAVEN
+2. build the image: docker build -t hz .
+3. tag the image: docker tag hz:latest amoahcp/hztest (amoahcp is my repo... select yours)
+4. push the image: docker push amoahcp/hztest
+5. deploy application: oc apply -f deployment.yaml
+6. deploy application: oc apply -f service.yaml
+7. create a route
+
+access the application via: http://myroute/swagger-ui.html
 
 
-// run in Kubernetes
+
+

@@ -13,7 +13,7 @@ spec:
         app: app
         role: hazelcast
     spec:
-      serviceAccount: my-cluster-hazelcast-enterprise
+      #serviceAccount: my-cluster-hazelcast-enterprise
       containers:
         - name: hz
           image: amoahcp/hz:latest
