@@ -18,7 +18,7 @@
 		<java.version>11</java.version>
 		<swagger.version>2.9.2</swagger.version>
 		<jmh.version>1.23</jmh.version>
-		<hazelcast.version>4.0</hazelcast.version>
+		<hazelcast.version>4.2.1</hazelcast.version>
 		<javafaker.version>0.15</javafaker.version>
 	</properties>
 
@@ -26,7 +26,7 @@
 
 		<dependency>
 			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-all</artifactId>
+			<artifactId>hazelcast-enterprise-all</artifactId>
 			<version>${hazelcast.version}</version>
 		</dependency>
 		<dependency>
@@ -138,5 +138,17 @@
 			</plugin>-->
 		</plugins>
 	</build>
+	<repositories>
+		<!-- You need to define following repository: -->
+		<repository>
+			<id>Hazelcast Private Release Repository</id>
+			<url>https://repository.hazelcast.com/release/</url>
+		</repository>
+		<!-- Optional repository if you want to use latest snapshots -->
+		<repository>
+			<id>Hazelcast Private Snapshot Repository</id>
+			<url>https://repository.hazelcast.com/snapshot/</url>
+		</repository>
+	</repositories>
 
 </project>

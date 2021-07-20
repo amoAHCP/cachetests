@@ -1,13 +1,31 @@
 hazelcast-client:
   cluster-name: my-cluster
+  native-memory:
+    enabled: true
+    allocator-type: STANDARD
+    size:
+      unit: GIGABYTES
+      value: 2
+    min-block-size: 128
+    page-size: 123
+    metadata-space-percentage: 12.5
   near-cache:
     persons:
-      in-memory-format: OBJECT
+      in-memory-format: NATIVE
       invalidate-on-change: true
       eviction:
         eviction-policy: LRU
         max-size-policy: ENTRY_COUNT
         size: 10
+    map:
+      default:
+        # Data type that will be used for storing recordMap.
+        # Possible values:
+        # BINARY (default): keys and values will be stored as binary data
+        # OBJECT : values will be stored in their object forms
+        # NATIVE : values will be stored in non-heap region of JVM
+        in-memory-format: NATIVE
+
   network:
     kubernetes:
       enabled: true

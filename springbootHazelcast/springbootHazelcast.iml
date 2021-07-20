@@ -33,7 +33,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-all:4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-enterprise-all:4.2.1" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger-ui:2.9.2" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-spring-web:2.9.2" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:2.9.2" level="project" />

@@ -5,4 +5,4 @@ metadata:
   labels:
     app: app
 data:
-  APP: "kube"
+  APP: "kube1"

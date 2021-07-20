@@ -13,9 +13,10 @@ spec:
       enabled: true
     persistence:
       size: 1Gi
-    adminCredentialsSecretName: adminsecret
+
   hazelcast:
     licenseKeySecretName: hz-license-key-secret
+
     hot-restart-persistence:
       enabled: ${hazelcast.hotRestart}
       base-dir: /data/hot-restart
@@ -28,8 +29,22 @@ spec:
 
     yaml:
       hazelcast:
+        serialization:
+          allow-override-default-serializers: true
+        client:
+          statistics:
+            enabled: true
         enabled: true
         cluster-name: my-cluster
+        native-memory:
+          enabled: true
+          allocator-type: STANDARD
+          size:
+            unit: GIGABYTES
+            value: 2
+          min-block-size: 128
+          page-size: 123
+          metadata-space-percentage: 12.5
         network:
           join:
             multicast:
@@ -41,9 +56,9 @@ spec:
               resolve-not-ready-addresses: true
         map:
           persons:
-            in-memory-format: BINARY
+            in-memory-format: NATIVE
             cache-deserialized-values: INDEX-ONLY
-            backup-count: 0
+            backup-count: 1
             async-backup-count: 2
             read-backup-data: true
             eviction:
@@ -51,7 +66,7 @@ spec:
               max-size-policy: PER_NODE
               size: 9000
           orders:
-            in-memory-format: BINARY
+            in-memory-format: NATIVE
             cache-deserialized-values: INDEX-ONLY
             eviction:
               eviction-policy: LRU

@@ -77,7 +77,7 @@ public class CachingConfiguration implements CachingConfigurer {
 
       //  ClientConfig config = new XmlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(Optional.ofNullable(HZ_CLIENT_CONFIG).orElse(hzConfig))).build(); //new ClientConfig();
         ClientConfig config =new YamlClientConfigBuilder(CachingConfiguration.class.getClassLoader().getResourceAsStream(HZ_CLIENT_CONFIG)).build();//new ClientConfig();
-        //config.getSerializationConfig().addSerializerConfig(productSerializer);
+        config.getSerializationConfig().addSerializerConfig(productSerializer);
       //  ClientConfig config = new ClientConfig();
        // config.setClusterName("my-cluster");
        // config.getNetworkConfig().getKubernetesConfig().setEnabled(true)
