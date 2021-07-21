@@ -29,4 +29,6 @@ hazelcast-client:
   network:
     kubernetes:
       enabled: true
-      service-name: my-cluster-hazelcast-enterprise
+      #service-name: my-cluster-hazelcast-enterprise
+      #namespace: hz-amo
+      service-dns: my-cluster-hazelcast-enterprise.hz-amo.svc.cluster.local

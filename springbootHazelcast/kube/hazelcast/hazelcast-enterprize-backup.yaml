@@ -2,6 +2,7 @@ apiVersion: hazelcast.com/v1alpha1
 kind: HazelcastEnterprise
 metadata:
   name: my-cluster
+  namespace: syrius-hazelcast
 spec:
   cluster:
     memberCount: 3
@@ -50,11 +51,29 @@ spec:
               enabled: false
             kubernetes:
               enabled: true
-              service-name: ${serviceName}
+              #service-name: ${serviceName}
+              service-dns: ${serviceName}.${namespace}.svc.cluster.local
               namespace: ${namespace}
               resolve-not-ready-addresses: true
-
+        map:
+          persons:
+            in-memory-format: NATIVE
+            cache-deserialized-values: INDEX-ONLY
+            backup-count: 1
+            async-backup-count: 2
+            read-backup-data: true
+            eviction:
+              eviction-policy: LRU
+              max-size-policy: PER_NODE
+              size: 9000
+          orders:
+            in-memory-format: NATIVE
+            cache-deserialized-values: INDEX-ONLY
+            eviction:
+              eviction-policy: LRU
+              max-size-policy: PER_NODE
+              size: 9000
   securityContext:
     enabled: true
-    runAsUser: '1000590000'
-    fsGroup: '1000590000'
+    runAsUser: '1000760000'
+    fsGroup: '1000760000'

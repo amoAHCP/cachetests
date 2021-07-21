@@ -17,7 +17,7 @@ spec:
       labels:
         app: demo
     spec:
-      serviceAccount: my-cluster-hazelcast-enterprise
+      #serviceAccount: my-cluster-hazelcast-enterprise
       containers:
       - image: amoahcp/hztest
         name: demo
