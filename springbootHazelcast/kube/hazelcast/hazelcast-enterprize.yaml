@@ -28,6 +28,14 @@ spec:
 
     yaml:
       hazelcast:
+        map:
+          default:
+            # Data type that will be used for storing recordMap.
+            # Possible values:
+            # BINARY (default): keys and values will be stored as binary data
+            # OBJECT : values will be stored in their object forms
+            # NATIVE : values will be stored in non-heap region of JVM
+            in-memory-format: NATIVE
         serialization:
           allow-override-default-serializers: true
         client:
